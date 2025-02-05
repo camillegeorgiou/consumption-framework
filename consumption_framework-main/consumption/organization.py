@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime, timedelta
 from hashlib import sha1
-from typing import Any, Dict
+from typing import Any, Dict, Optional, Union
 
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import streaming_bulk
@@ -38,9 +38,13 @@ def get_org_billing_data(
     billing_api_key: str,
     from_ts: datetime,
     api_host: str,
+    requests_ssl_validation: Optional[Union[bool, str]] = None,
 ):
     deployments = ESSBillingClient(
-        api_host=api_host, api_key=billing_api_key, org_id=organization_id
+        api_host=api_host,
+        api_key=billing_api_key,
+        org_id=organization_id,
+        requests_ssl_validation=requests_ssl_validation,
     ).get_billing_data(from_ts)["instances"]
 
     meta_parameters = {
@@ -97,6 +101,7 @@ def organization_billing(
     threads: int,
     force: bool,
     api_host: str,
+    requests_ssl_validation: Optional[Union[bool, str]] = None,
 ):
     # Round the time ranges to the full hour
     time_ranges = [
@@ -127,6 +132,7 @@ def organization_billing(
             "billing_api_key": billing_api_key,
             "from_ts": from_ts,
             "api_host": api_host,
+            "requests_ssl_validation": requests_ssl_validation,
         }
         for from_ts in time_ranges
         if not checker.is_in_cluster(from_ts, from_ts + timedelta(hours=1))

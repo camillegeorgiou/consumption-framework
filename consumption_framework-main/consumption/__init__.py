@@ -2,7 +2,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from .deployment import monitoring_analyzer
 from .organization import organization_billing
@@ -27,6 +27,7 @@ class Consumption:
         on_prem_costs_dict: Optional[Dict[str, float]] = None,
         force: bool = False,
         compute_usages: bool = False,
+        requests_ssl_validation: Optional[Union[bool, str]] = None,
     ):
         self.organization_id = organization_id
         self.organization_name = organization_name
@@ -39,6 +40,7 @@ class Consumption:
         self.api_host = api_host
         self.monitoring_index_pattern = monitoring_index_pattern
         self.parsing_regex_str = parsing_regex_str
+        self.requests_ssl_validation = requests_ssl_validation
 
         if source_config:
             self.source_es = ElasticsearchClient(**source_config)
@@ -93,6 +95,7 @@ class Consumption:
             threads=self.threads,
             force=self.force,
             api_host=self.api_host,
+            requests_ssl_validation=self.requests_ssl_validation,
         )
 
     def consume_monitoring(
@@ -115,6 +118,7 @@ class Consumption:
             monitoring_index_pattern=self.monitoring_index_pattern,
             parsing_regex_str=self.parsing_regex_str,
             on_prem_costs_dict=self.on_prem_costs_dict,
+            requests_ssl_validation=self.requests_ssl_validation,
         )
 
 

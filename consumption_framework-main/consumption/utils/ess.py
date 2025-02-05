@@ -3,7 +3,7 @@ import re
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from time import sleep
-from typing import Any, Dict
+from typing import Any, Dict, Optional, Union
 
 import requests
 
@@ -11,9 +11,18 @@ logger = logging.getLogger(__name__)
 
 
 class ESSBillingClient:
-    def __init__(self, api_host: str, api_key: str, org_id: str):
+    def __init__(
+        self,
+        api_host: str,
+        api_key: str,
+        org_id: str,
+        requests_ssl_validation: Optional[Union[str, bool]] = None,
+    ):
         client = requests.Session()
         client.headers.update({"Authorization": "ApiKey " + api_key})
+
+        if requests_ssl_validation is not None:
+            client.verify = requests_ssl_validation
 
         self.client = client
         self.org_id = org_id

@@ -67,7 +67,7 @@ def with_click_options(func):
             config_dict = json.loads(inline_config)
         elif config_file and os.path.exists(config_file):
             with open(config_file, "r") as f:
-                config_dict = yaml.safe_load(f)
+                config_dict = yaml.load(f, Loader=yaml.FullLoader)
 
         # Override config_dict with individually passed config parameters
         for c in config:
@@ -137,6 +137,7 @@ def consume_monitoring(config, lookbehind, threads, force, vpn, compute_usages):
         api_host=get_api_host(config, vpn),
         monitoring_index_pattern=config.get("monitoring_index_pattern"),
         parsing_regex_str=config.get("parsing_regex_str"),
+        requests_ssl_validation=config.get("requests_ssl_validation"),
     ).consume_monitoring(range_start, range_end)
 
 
@@ -167,6 +168,7 @@ def get_billing_data(
         force=force,
         api_host=get_api_host(config, vpn),
         monitoring_index_pattern=config.get("monitoring_index_pattern"),
+        requests_ssl_validation=config.get("requests_ssl_validation"),
     ).get_billing_data(range_start, range_end)
 
 

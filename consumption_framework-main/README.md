@@ -24,6 +24,12 @@ Namely, thanks to the data these tool can gather, and the Kibana dashboards thro
 
 </details>
 
+## Minimal requirements
+
+- Elastic version > 8.0
+- Python minimal version > 3.11
+  > pandas>=1.5.0 - Check compatibility [here](https://pandas.pydata.org/pandas-docs/version/1.5/getting_started/install.html)
+
 ## How to use?
 
 The `main.py` script exposes multiple commands:

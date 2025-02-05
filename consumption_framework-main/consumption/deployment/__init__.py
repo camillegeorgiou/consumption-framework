@@ -248,9 +248,12 @@ def monitoring_analyzer(
     monitoring_index_pattern: Optional[str] = None,
     parsing_regex_str: Optional[str] = None,
     on_prem_costs_dict: Optional[Dict[str, float]] = None,
+    requests_ssl_validation: Optional[bool] = None,
 ):
     cost_provider = (
-        ESSBillingClientCostsProvider(api_host, billing_api_key, organization_id)
+        ESSBillingClientCostsProvider(
+            api_host, billing_api_key, organization_id, requests_ssl_validation
+        )
         if not on_prem_costs_dict
         else None
     )
